@@ -122,7 +122,7 @@ export const BudgetCard = ({
   };
 
   return (
-    <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300">
+    <Card className="mobile-card bg-white/95 backdrop-blur-sm border-0 shadow-sm hover:shadow-lg transition-all duration-300 rounded-2xl">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -152,7 +152,7 @@ export const BudgetCard = ({
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="p-2 hover:bg-gray-100 rounded-full"
+                  className="p-2 hover:bg-gray-100 rounded-full transition-all active:scale-90"
                 >
                   <MoreVertical className="h-4 w-4" />
                 </Button>
@@ -206,7 +206,7 @@ export const BudgetCard = ({
           <div className="space-y-2">
             <Progress
               value={percentage}
-              className="h-2"
+              className="h-2 bg-gray-100"
               style={{
                 background: isOverBudget
                   ? "#fecaca"

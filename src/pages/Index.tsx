@@ -46,8 +46,8 @@ const Index = () => {
     <>
       <Header />
 
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 pb-20 md:pb-8 w-full">
-        <div className="container mx-auto px-3 md:px-4 py-8 pt-0 md:pt-8 max-w-7xl">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 pb-20 md:pb-8 w-full mobile-scroll">
+        <div className="container mx-auto px-4 md:px-4 py-6 pt-0 md:pt-8 max-w-7xl">
           {/* this section show in only desktop */}
           <div className="hidden md:block">
             <FinanceHeader
@@ -74,7 +74,11 @@ const Index = () => {
             />
           </Tabs>
 
-          <MobileBottomNav activeTab={activeTab} onTabChange={setActiveTab} />
+          <MobileBottomNav
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+            onAddTransaction={() => setShowTransactionForm(true)}
+          />
           <Sheet
             open={showTransactionForm}
             onOpenChange={setShowTransactionForm}

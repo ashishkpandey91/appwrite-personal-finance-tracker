@@ -10,7 +10,23 @@ import Index from "./pages/Index";
 import AuthLayout from "./components/AuthLayout";
 import TestEnv from "./pages/TestEnv";
 import "./index.css";
+import "./styles/mobile.css";
 import { Toaster } from "@/components/ui/sonner"
+import { registerSW } from 'virtual:pwa-register'
+
+// Register service worker
+const updateSW = registerSW({
+  onNeedRefresh() {
+    // Show a prompt to the user to refresh
+    const shouldUpdate = confirm('New content available. Reload?')
+    if (shouldUpdate) {
+      updateSW(true)
+    }
+  },
+  onOfflineReady() {
+    console.log('App ready to work offline')
+  },
+})
 
 const router = createBrowserRouter([
   {

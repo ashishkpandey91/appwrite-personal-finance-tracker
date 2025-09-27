@@ -104,8 +104,8 @@ export const TransactionList = ({ transactions = [], isLoading = false }: Transa
   };
 
   return (
-    <Card className="bg-white/80 backdrop-blur-sm border-0 md:shadow-lg">
-      <CardHeader>
+    <Card className="bg-white/95 backdrop-blur-sm border-0 md:shadow-lg rounded-2xl md:rounded-lg">
+      <CardHeader className="pb-3">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
             <CardTitle className="text-xl font-bold text-gray-800">
@@ -174,15 +174,15 @@ export const TransactionList = ({ transactions = [], isLoading = false }: Transa
             filteredTransactions.map((transaction, index) => (
               <div
                 key={transaction.id}
-                className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-gray-50/50 rounded-lg border border-gray-100 hover:bg-gray-50 transition-colors duration-200 animate-fade-in gap-3"
+                className="mobile-card flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 animate-fade-in gap-3 mb-3"
                 style={{ animationDelay: `${index * 50}ms` }}
               >
                 <div className="flex items-start sm:items-center gap-3 sm:gap-4 flex-1 min-w-0">
                   <div
-                    className={`p-2 rounded-full flex-shrink-0 ${
+                    className={`p-2.5 rounded-full flex-shrink-0 ${
                       transaction.type === "income"
-                        ? "bg-green-100 text-green-600"
-                        : "bg-red-100 text-red-600"
+                        ? "bg-gradient-to-br from-green-50 to-green-100 text-green-600"
+                        : "bg-gradient-to-br from-red-50 to-red-100 text-red-600"
                     }`}
                   >
                     {transaction.type === "income" ? (
@@ -211,7 +211,7 @@ export const TransactionList = ({ transactions = [], isLoading = false }: Transa
                           </button>
                         )}
                       </div>
-                      <Badge variant="outline" className="text-xs capitalize flex-shrink-0">
+                      <Badge variant="outline" className="text-xs capitalize flex-shrink-0 bg-blue-50 border-blue-200 text-blue-700">
                         {getCategoryName(transaction.category)}
                       </Badge>
                     </div>
