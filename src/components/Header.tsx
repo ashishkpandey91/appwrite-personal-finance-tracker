@@ -28,7 +28,7 @@ function Header() {
 
   return (
     <header className="w-full relative z-50">
-      <div className="flex items-center justify-end h-full px-4 md:px-10 py-2 bg-gradient-to-br from-blue-100 via-purple-100 to-blue-100 relative">
+      <div className="flex items-center justify-end h-full px-4 md:px-10 py-2 relative">
         <div
           onClick={() => setDropdownOpen((prev) => !prev)}
           className="flex items-center space-x-2 cursor-pointer"

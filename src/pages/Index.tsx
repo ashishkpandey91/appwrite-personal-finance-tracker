@@ -26,29 +26,21 @@ const Index = () => {
 
   const [showTransactionForm, setShowTransactionForm] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
 
   useEffect(() => {
-    // if (transactions.loading !== "succeeded") {
-    //   dispatch(fetchTransactions());
-    // }
-
-    // if (categoryState.loading !== "succeeded") {
-    //   dispatch(getUserCategories());
-    // }
-    // if (budgetState.loading !== "succeeded") {
-    //   dispatch(getBudgets());
-    // }
-    dispatch(getUserCategories());
-    dispatch(fetchTransactions()).then(() => {
-      // Fetch budgets after transactions are loaded
-      dispatch(getBudgets());
-    });
-  }, [
-    // dispatch,
-    // transactions.loading,
-    // categoryState.loading,
-    // budgetState.loading,
-  ]);
+    const loadData = async () => {
+      setIsInitialLoading(true);
+      try {
+        await dispatch(getUserCategories());
+        await dispatch(fetchTransactions());
+        await dispatch(getBudgets());
+      } finally {
+        setIsInitialLoading(false);
+      }
+    };
+    loadData();
+  }, [dispatch]);
 
   return (
     <>
@@ -61,7 +53,7 @@ const Index = () => {
             <FinanceHeader
               onAddTransaction={() => setShowTransactionForm(true)}
             />
-            <OverviewCards />
+            <OverviewCards isLoading={isInitialLoading} />
           </div>
 
           <Tabs
@@ -78,6 +70,7 @@ const Index = () => {
             <FinanceTabsContent
               onAddTransaction={() => setShowTransactionForm(true)}
               transactions={transactions.entities}
+              isLoading={isInitialLoading}
             />
           </Tabs>
 

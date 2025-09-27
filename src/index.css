@@ -111,6 +111,28 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #3C58EA; 
+  background-color: #3C58EA;
   border-radius: 9999px;
+}
+
+/* Shimmer animation for skeleton loaders */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s ease-in-out infinite;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.1) 20%,
+    rgba(255, 255, 255, 0.3) 60%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
 }

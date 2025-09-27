@@ -4,7 +4,7 @@ import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Target, MoreVertical, AlertTriangle } from "lucide-react";
+import { Target, MoreVertical, AlertTriangle, Loader2 } from "lucide-react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import {
   Sheet,
@@ -44,6 +44,8 @@ export const BudgetCard = ({
   const [isEditing, setIsEditing] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isAlertDialogOpen, setIsAlertDialogOpen] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const [budgetForm, setBudgetForm] = useState({
     id: budget.id,
@@ -86,9 +88,14 @@ export const BudgetCard = ({
   };
 
   const handleConfirmDelete = async () => {
-    await dispatch(deleteBudget(budgetForm.id));
-    setIsAlertDialogOpen(false);
-    onDeleteBudget(budgetForm.id);
+    setIsDeleting(true);
+    try {
+      await dispatch(deleteBudget(budgetForm.id));
+      setIsAlertDialogOpen(false);
+      onDeleteBudget(budgetForm.id);
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   const handleCancelDelete = () => {
@@ -96,17 +103,22 @@ export const BudgetCard = ({
   };
 
   const handleUpdateBudget = async () => {
-    await dispatch(
-      updateBudget({
-        id: budgetForm.id,
-        category: budgetForm.category,
-        budget: parseFloat(budgetForm.budget),
-        month: budgetForm.month,
-        year: budgetForm.year,
-        expense: String(expenseAmount)
-      })
-    );
-    setIsEditing(false);
+    setIsUpdating(true);
+    try {
+      await dispatch(
+        updateBudget({
+          id: budgetForm.id,
+          category: budgetForm.category,
+          budget: parseFloat(budgetForm.budget),
+          month: budgetForm.month,
+          year: budgetForm.year,
+          expense: String(expenseAmount)
+        })
+      );
+      setIsEditing(false);
+    } finally {
+      setIsUpdating(false);
+    }
   };
 
   return (
@@ -270,6 +282,7 @@ export const BudgetCard = ({
                 variant="outline"
                 onClick={() => setIsEditing(false)}
                 className="flex-1"
+                disabled={isUpdating}
               >
                 Cancel
               </Button>
@@ -278,8 +291,16 @@ export const BudgetCard = ({
                 onClick={async () => {
                   await handleUpdateBudget();
                 }}
+                disabled={isUpdating}
               >
-                Save
+                {isUpdating ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  "Save"
+                )}
               </Button>
             </div>
           </div>
@@ -297,9 +318,18 @@ export const BudgetCard = ({
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel onClick={handleCancelDelete}>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleConfirmDelete}>
-              Continue
+            <AlertDialogCancel onClick={handleCancelDelete} disabled={isDeleting}>
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction onClick={handleConfirmDelete} disabled={isDeleting}>
+              {isDeleting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Deleting...
+                </>
+              ) : (
+                "Continue"
+              )}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

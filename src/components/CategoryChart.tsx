@@ -3,14 +3,19 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recha
 import { Transaction } from '@/types/finance';
 import { PieChart as PieChartIcon } from 'lucide-react';
 import { useAppSelector } from '@/store/hook';
+import { CategoryChartSkeleton } from '@/components/skeletons/ChartSkeleton';
 
 interface CategoryChartProps {
   transactions: Transaction[];
+  isLoading?: boolean;
 }
 
 const COLORS = ['#3b82f6', '#ef4444', '#10b981', '#f59e0b', '#8b5cf6', '#06b6d4', '#f97316', '#84cc16'];
 
-export const CategoryChart = ({ transactions = [] }: CategoryChartProps) => {
+export const CategoryChart = ({ transactions = [], isLoading = false }: CategoryChartProps) => {
+  if (isLoading) {
+    return <CategoryChartSkeleton />;
+  }
   // Ensure transactions is an array
   const safeTransactions = Array.isArray(transactions) ? transactions : [];
 

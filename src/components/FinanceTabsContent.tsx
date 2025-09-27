@@ -7,6 +7,8 @@ import { Transaction } from "@/types/finance";
 import { FinanceHeader } from "./FinanceHeader";
 import { OverviewCards } from "./OverviewCards";
 import { Button } from "./ui/button";
+import { BudgetListSkeleton } from "@/components/skeletons/BudgetSkeleton";
+import { Loader2 } from "lucide-react";
 
 import {
   Sheet,
@@ -30,15 +32,19 @@ import CurrencyConverter from "./CurrencyConverter";
 interface FinanceTabsContentProps {
   transactions: Transaction[];
   onAddTransaction: () => void;
+  isLoading?: boolean;
 }
 
 export const FinanceTabsContent = ({
   onAddTransaction,
   transactions,
+  isLoading = false,
 }: FinanceTabsContentProps) => {
   const budgets = useAppSelector((state) => state.budget?.entities || []);
   const [showSetBudgetForm, setShowSetBudgetForm] = useState(false);
   const [showSetBudgetEditForm, setShowSetBudgetEditForm] = useState(false);
+  const [isCreatingBudget, setIsCreatingBudget] = useState(false);
+  const [isUpdatingBudget, setIsUpdatingBudget] = useState(false);
   const dispatch = useAppDispatch();
   const monthAbbrs = [
     "jan",
@@ -80,6 +86,7 @@ export const FinanceTabsContent = ({
       return;
     }
 
+    setIsCreatingBudget(true);
     try {
       console.log("Dispatching createBudget with:", {
         category: budgetForm.category,
@@ -109,6 +116,8 @@ export const FinanceTabsContent = ({
     } catch (error) {
       console.error("Error creating budget:", error);
       alert("Failed to create budget. Check console for details.");
+    } finally {
+      setIsCreatingBudget(false);
     }
   };
 
@@ -118,24 +127,29 @@ export const FinanceTabsContent = ({
       return;
     }
 
-    // For now, create a new budget since we're in the edit form
-    // This should be replaced with updateBudget when we have the budget ID
-    await dispatch(createBudget({
-      category: budgetForm.category,
-      budget: Number(budgetForm.budget),
-      month: budgetForm.month,
-      year: budgetForm.year
-    }));
+    setIsUpdatingBudget(true);
+    try {
+      // For now, create a new budget since we're in the edit form
+      // This should be replaced with updateBudget when we have the budget ID
+      await dispatch(createBudget({
+        category: budgetForm.category,
+        budget: Number(budgetForm.budget),
+        month: budgetForm.month,
+        year: budgetForm.year
+      }));
 
-    // Reset form
-    setBudgetForm({
-      category: "",
-      budget: "",
-      month: monthAbbrs[new Date().getMonth()],
-      year: String(new Date().getFullYear())
-    });
+      // Reset form
+      setBudgetForm({
+        category: "",
+        budget: "",
+        month: monthAbbrs[new Date().getMonth()],
+        year: String(new Date().getFullYear())
+      });
 
-    setShowSetBudgetForm(false);
+      setShowSetBudgetForm(false);
+    } finally {
+      setIsUpdatingBudget(false);
+    }
   };
 
   return (
@@ -145,7 +159,7 @@ export const FinanceTabsContent = ({
           <div className="block md:hidden">
             <FinanceHeader onAddTransaction={onAddTransaction} />
 
-            <OverviewCards />
+            <OverviewCards isLoading={isLoading} />
           </div>
         </div>
 
@@ -260,6 +274,7 @@ export const FinanceTabsContent = ({
                     variant="outline"
                     onClick={() => setShowSetBudgetForm(false)}
                     className="flex-1"
+                    disabled={isCreatingBudget}
                   >
                     Cancel
                   </Button>
@@ -267,8 +282,16 @@ export const FinanceTabsContent = ({
                     type="button"
                     className="flex-1"
                     onClick={handleAddNewBudget}
+                    disabled={isCreatingBudget}
                   >
-                    Save
+                    {isCreatingBudget ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Saving...
+                      </>
+                    ) : (
+                      "Save"
+                    )}
                   </Button>
                 </div>
               </div>
@@ -377,6 +400,7 @@ export const FinanceTabsContent = ({
                     variant="outline"
                     onClick={() => setShowSetBudgetForm(false)}
                     className="flex-1"
+                    disabled={isUpdatingBudget}
                   >
                     Cancel
                   </Button>
@@ -385,8 +409,16 @@ export const FinanceTabsContent = ({
                     onClick={async () => {
                       await handleUpdateBudget();
                     }}
+                    disabled={isUpdatingBudget}
                   >
-                    Update
+                    {isUpdatingBudget ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Updating...
+                      </>
+                    ) : (
+                      "Update"
+                    )}
                   </Button>
                 </div>
               </div>
@@ -394,7 +426,9 @@ export const FinanceTabsContent = ({
           </Sheet>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {budgets.length === 0 ? (
+          {isLoading ? (
+            <BudgetListSkeleton />
+          ) : budgets.length === 0 ? (
             <div className="col-span-full flex flex-col gap-8 justify-center items-center">
               <p className="text-gray-500">
                 You haven't set any budget yet.
@@ -464,13 +498,13 @@ export const FinanceTabsContent = ({
       </TabsContent>
 
       <TabsContent value="transactions">
-        <TransactionList transactions={transactions} />
+        <TransactionList transactions={transactions} isLoading={isLoading} />
       </TabsContent>
 
       <TabsContent value="analytics" className="space-y-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <SpendingChart transactions={transactions} />
-          <CategoryChart transactions={transactions} />
+          <SpendingChart transactions={transactions} isLoading={isLoading} />
+          <CategoryChart transactions={transactions} isLoading={isLoading} />
         </div>
       </TabsContent>
     </>

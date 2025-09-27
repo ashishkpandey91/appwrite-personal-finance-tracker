@@ -7,11 +7,12 @@ import {
   CustomSelect,
   CustomSelectItem,
 } from "@/components/ui/custom-select";
-import { Calendar, Tag, FileText, IndianRupee } from "lucide-react";
+import { Calendar, Tag, FileText, IndianRupee, Loader2 } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { addNewCategory} from "@/features/categorySlice";
 import { addNewTransaction } from "@/features/transactionSlice";
 import { getBudgets } from "@/features/budgetSlice";
+import { TransactionFormSkeleton } from "@/components/skeletons/TransactionSkeleton";
 
 
 interface TransactionFormProps {
@@ -21,6 +22,8 @@ interface TransactionFormProps {
 export const TransactionForm = ({ onClose }: TransactionFormProps) => {
   const categoryState = useAppSelector((state) => state.category);
   const dispatch = useAppDispatch();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoadingCategories, setIsLoadingCategories] = useState(false);
 
   const [formData, setFormData] = useState({
     type: "expense" as "income" | "expense",
@@ -37,15 +40,20 @@ export const TransactionForm = ({ onClose }: TransactionFormProps) => {
   const handleAddNewCategory = async () => {
     if (!newCategory.trim()) return;
 
-    await dispatch(addNewCategory({
-      name: newCategory,
-      type: formData.type
-    }));
-    setShowAddNew(false);
-    setNewCategory("");
+    setIsLoadingCategories(true);
+    try {
+      await dispatch(addNewCategory({
+        name: newCategory,
+        type: formData.type
+      }));
+      setShowAddNew(false);
+      setNewCategory("");
+    } finally {
+      setIsLoadingCategories(false);
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const result = transactionSchema.safeParse(formData);
@@ -61,16 +69,20 @@ export const TransactionForm = ({ onClose }: TransactionFormProps) => {
     }
 
     setErrors({});
+    setIsSubmitting(true);
 
-    const transitions = {
-      ...result.data,
-      amount: parseFloat(result.data.amount),
-    };
+    try {
+      const transitions = {
+        ...result.data,
+        amount: parseFloat(result.data.amount),
+      };
 
-    dispatch(addNewTransaction(transitions));
-    dispatch(getBudgets());
-
-    onClose();
+      await dispatch(addNewTransaction(transitions));
+      await dispatch(getBudgets());
+      onClose();
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const sortedCategories = [...(categoryState?.entities || [])]
@@ -83,6 +95,10 @@ export const TransactionForm = ({ onClose }: TransactionFormProps) => {
       if (bName === "others") return -1;
       return 0;
     });
+
+  if (categoryState.loading === "pending" && categoryState.entities.length === 0) {
+    return <TransactionFormSkeleton />;
+  }
 
   return (
     <div>
@@ -211,6 +227,7 @@ export const TransactionForm = ({ onClose }: TransactionFormProps) => {
               variant="outline"
               onClick={onClose}
               className="flex-1"
+              disabled={isSubmitting}
             >
               Cancel
             </Button>
@@ -221,8 +238,16 @@ export const TransactionForm = ({ onClose }: TransactionFormProps) => {
                   ? "bg-green-600 hover:bg-green-700"
                   : "bg-red-600 hover:bg-red-700"
               } text-white`}
+              disabled={isSubmitting}
             >
-              Add {formData.type === "income" ? "Income" : "Expense"}
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Adding...
+                </>
+              ) : (
+                `Add ${formData.type === "income" ? "Income" : "Expense"}`
+              )}
             </Button>
           </div>
         </div>

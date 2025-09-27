@@ -18,12 +18,14 @@ import {
 } from "lucide-react";
 import { Transaction } from "@/types/finance";
 import { useAppSelector } from "@/store/hook";
+import { TransactionListSkeleton } from "@/components/skeletons/TransactionSkeleton";
 
 interface TransactionListProps {
   transactions: Transaction[];
+  isLoading?: boolean;
 }
 
-export const TransactionList = ({ transactions = [] }: TransactionListProps) => {
+export const TransactionList = ({ transactions = [], isLoading = false }: TransactionListProps) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState<"all" | "income" | "expense">(
     "all"
@@ -160,6 +162,9 @@ export const TransactionList = ({ transactions = [] }: TransactionListProps) => 
         </div>
       </CardHeader>
       <CardContent>
+        {isLoading ? (
+          <TransactionListSkeleton />
+        ) : (
         <div className="space-y-3">
           {filteredTransactions.length === 0 ? (
             <div className="text-center py-8 text-gray-500">
@@ -231,6 +236,7 @@ export const TransactionList = ({ transactions = [] }: TransactionListProps) => 
             ))
           )}
         </div>
+        )}
       </CardContent>
     </Card>
   );

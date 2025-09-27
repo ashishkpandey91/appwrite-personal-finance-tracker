@@ -2,12 +2,17 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Transaction } from '@/types/finance';
 import { TrendingUp } from 'lucide-react';
+import { SpendingChartSkeleton } from '@/components/skeletons/ChartSkeleton';
 
 interface SpendingChartProps {
   transactions: Transaction[];
+  isLoading?: boolean;
 }
 
-export const SpendingChart = ({ transactions = [] }: SpendingChartProps) => {
+export const SpendingChart = ({ transactions = [], isLoading = false }: SpendingChartProps) => {
+  if (isLoading) {
+    return <SpendingChartSkeleton />;
+  }
   // Ensure transactions is an array
   const safeTransactions = Array.isArray(transactions) ? transactions : [];
 
