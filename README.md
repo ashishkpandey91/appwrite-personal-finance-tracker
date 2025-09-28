@@ -1,0 +1,1 @@
+# Appwrite Personal Finance Tracker
