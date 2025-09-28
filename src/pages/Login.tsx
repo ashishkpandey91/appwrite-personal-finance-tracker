@@ -57,58 +57,62 @@ export default function Login() {
   };
 
   return (
-    <Card className="w-full mx-3 md:w-[450px]">
-      <CardHeader>
-        <CardTitle className="text-center text-xl pt-3">Login</CardTitle>
-        <CardDescription className="text-center text-sm">
-          Don't have an account?{" "}
-          <Link className="font-semibold" to={"/signup"}>
-            Sign up
-          </Link>
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex flex-col space-y-1.5">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              placeholder="Enter your email"
-              {...register("email")}
-            />
-            {errors.email && (
-              <p className="text-red-500 text-sm">{errors.email.message}</p>
-            )}
-          </div>
-
-          <div className="flex flex-col space-y-1.5">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              placeholder="Enter your password"
-              {...register("password")}
-            />
-            {errors.password && (
-              <p className="text-red-500 text-sm">{errors.password.message}</p>
-            )}
-          </div>
-
-          <CardFooter className="flex justify-center p-0 pt-2">
-            <Button
-              className="w-full tracking-wide"
-              type="submit"
-              disabled={loading}
-            >
-              {loading ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                "Sign In"
+    <div className=" w-full flex min-h-screen items-center justify-center px-4">
+      <Card className="w-full md:w-[450px]">
+        <CardHeader>
+          <CardTitle className="text-center text-xl pt-3">Login</CardTitle>
+          <CardDescription className="text-center text-sm">
+            Don't have an account?{" "}
+            <Link className="font-semibold" to={"/signup"}>
+              Sign up
+            </Link>
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                placeholder="Enter your email"
+                {...register("email")}
+              />
+              {errors.email && (
+                <p className="text-red-500 text-sm">{errors.email.message}</p>
               )}
-            </Button>
-          </CardFooter>
-        </form>
-      </CardContent>
-    </Card>
+            </div>
+
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="Enter your password"
+                {...register("password")}
+              />
+              {errors.password && (
+                <p className="text-red-500 text-sm">
+                  {errors.password.message}
+                </p>
+              )}
+            </div>
+
+            <CardFooter className="flex justify-center p-0 pt-2">
+              <Button
+                className="w-full tracking-wide"
+                type="submit"
+                disabled={loading}
+              >
+                {loading ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  "Sign In"
+                )}
+              </Button>
+            </CardFooter>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
   );
 }

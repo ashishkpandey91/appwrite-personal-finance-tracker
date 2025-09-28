@@ -5,7 +5,7 @@ import CONF from '@/conf';
 const client = new Client();
 
 client
-  .setEndpoint(CONF.get('APPWRITE_URL') || 'https://cloud.appwrite.io/v1')
+  .setEndpoint(CONF.get('APPWRITE_URL') || 'https://nyc.cloud.appwrite.io/v1')
   .setProject(CONF.get('APPWRITE_PROJECT_ID'));
 
 // Initialize services

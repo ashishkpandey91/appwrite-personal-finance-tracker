@@ -160,7 +160,7 @@ export const TransactionForm = ({ onClose }: TransactionFormProps) => {
           </div>
 
           {/* Category */}
-          <div>
+          <div className="flex flex-col gap-2">
             <Label htmlFor="category">Category</Label>
             <CustomSelect
               value={formData.category}
@@ -174,7 +174,6 @@ export const TransactionForm = ({ onClose }: TransactionFormProps) => {
                 }
               }}
               placeholder="Select a category"
-              className="mt-1"
             >
               {sortedCategories.map((category) => (
                 <CustomSelectItem key={category.id} value={String(category.id)}>

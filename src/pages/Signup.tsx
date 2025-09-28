@@ -44,7 +44,10 @@ export default function Signup() {
       const { data: user } = await authService.getCurrentUser();
       if (user) {
         dispatch(login(user));
-        toast({ title: "Account created", description: "Signed up successfully!" });
+        toast({
+          title: "Account created",
+          description: "Signed up successfully!",
+        });
         navigate("/");
       }
     }
@@ -61,57 +64,59 @@ export default function Signup() {
   };
 
   return (
-    <Card className="w-full mx-3 md:w-[450px]">
-      <CardHeader>
-        <CardTitle className="text-center text-xl pt-3">Sign Up</CardTitle>
-        <CardDescription className="text-center text-sm">
-          Already have an account?{" "}
-          <Link className="font-semibold" to="/login">
-            Login
-          </Link>
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form className="space-y-4" onSubmit={handleSignup}>
-          <div className="flex flex-col space-y-1.5">
-            <Label htmlFor="name">Name</Label>
-            <Input
-              id="name"
-              placeholder="Your name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </div>
+    <div className="w-full flex min-h-screen items-center justify-center px-4">
+      <Card className="w-full md:w-[450px]">
+        <CardHeader>
+          <CardTitle className="text-center text-xl pt-3">Sign Up</CardTitle>
+          <CardDescription className="text-center text-sm">
+            Already have an account?{" "}
+            <Link className="font-semibold" to="/login">
+              Login
+            </Link>
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form className="space-y-4" onSubmit={handleSignup}>
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="name">Name</Label>
+              <Input
+                id="name"
+                placeholder="Your name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
 
-          <div className="flex flex-col space-y-1.5">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              placeholder="you@example.com"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                placeholder="you@example.com"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
 
-          <div className="flex flex-col space-y-1.5">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              placeholder="Password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                placeholder="Password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
 
-          <CardFooter className="flex justify-center p-0 pt-4">
-            <Button className="w-full" disabled={loading} type="submit">
-              {loading ? "Creating..." : "Sign Up"}
-            </Button>
-          </CardFooter>
-        </form>
-      </CardContent>
-    </Card>
+            <CardFooter className="flex justify-center p-0 pt-4">
+              <Button className="w-full" disabled={loading} type="submit">
+                {loading ? "Creating..." : "Sign Up"}
+              </Button>
+            </CardFooter>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
