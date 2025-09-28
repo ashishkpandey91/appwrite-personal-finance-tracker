@@ -8,7 +8,6 @@ import LoginPage from "./pages/Login";
 import SignupPage from "./pages/Signup";
 import Index from "./pages/Index";
 import AuthLayout from "./components/AuthLayout";
-import TestEnv from "./pages/TestEnv";
 import "./index.css";
 import "./styles/mobile.css";
 import { Toaster } from "@/components/ui/sonner"
@@ -56,10 +55,6 @@ const router = createBrowserRouter([
             <SignupPage />
           </AuthLayout>
         ),
-      },
-      {
-        path: "/test-env",
-        element: <TestEnv />,
       },
     ],
   },

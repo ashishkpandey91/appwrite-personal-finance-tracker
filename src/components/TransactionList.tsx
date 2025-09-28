@@ -104,9 +104,9 @@ export const TransactionList = ({ transactions = [], isLoading = false }: Transa
   };
 
   return (
-    <Card className="bg-white/95 backdrop-blur-sm border-0 md:shadow-lg rounded-2xl md:rounded-lg">
-      <CardHeader className="pb-3">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+    <Card className="bg-transparent md:bg-white/95 backdrop-blur-sm border-0 md:shadow-lg md:rounded-lg">
+      <CardHeader className="pb-3 p-0 md:p-6">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 ">
           <div>
             <CardTitle className="text-xl font-bold text-gray-800">
               Recent Transactions
@@ -161,11 +161,11 @@ export const TransactionList = ({ transactions = [], isLoading = false }: Transa
           </div>
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="p-0 md:p-6">
         {isLoading ? (
           <TransactionListSkeleton />
         ) : (
-        <div className="space-y-3">
+        <div className="space-y-3 pt-4 md:pt-0">
           {filteredTransactions.length === 0 ? (
             <div className="text-center py-8 text-gray-500">
               <p>No transactions found</p>

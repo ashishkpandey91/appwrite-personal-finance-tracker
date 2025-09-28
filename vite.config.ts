@@ -15,8 +15,28 @@ export default defineConfig(({ mode }) => ({
     componentTagger(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'icon.svg'],
-      manifest: false, // We already have manifest.json in public folder
+      injectRegister: 'auto',
+      manifest: {
+        name: 'Personal Finance Tracker',
+        short_name: 'FinanceTracker',
+        description: 'Track your personal finances with ease',
+        theme_color: '#ffffff',
+        background_color: '#3E59EB',
+        display: 'standalone',
+        start_url: '/',
+        icons: [
+          {
+            src: '/android-chrome-192x192.png',
+            sizes: '192x192',
+            type: 'image/png',
+          },
+          {
+            src: '/android-chrome-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+          },
+        ],
+      },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,jpeg,gif,webp,woff,woff2,ttf,eot}'],
         runtimeCaching: [
