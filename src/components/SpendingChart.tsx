@@ -65,15 +65,15 @@ export const SpendingChart = ({ transactions = [], isLoading = false }: Spending
                 tick={{ fontSize: 12 }}
                 stroke="#666"
               />
-              <YAxis 
+              <YAxis
                 tick={{ fontSize: 12 }}
                 stroke="#666"
-                tickFormatter={(value) => `$${value}`}
+                tickFormatter={(value) => `₹${value}`}
               />
-              <Tooltip 
-                formatter={(value: number, name: string) => [`$${Number(value).toFixed(2)}`, name === 'income' ? 'Income' : 'Expense']}
+              <Tooltip
+                formatter={(value: number, name: string) => [`₹${Number(value).toFixed(2)}`, name === 'income' ? 'Income' : 'Expense']}
                 labelStyle={{ color: '#333' }}
-                contentStyle={{ 
+                contentStyle={{
                   backgroundColor: 'white',
                   border: '1px solid #e5e7eb',
                   borderRadius: '8px',

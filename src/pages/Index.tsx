@@ -83,14 +83,33 @@ const Index = () => {
             open={showTransactionForm}
             onOpenChange={setShowTransactionForm}
           >
-            <SheetContent className="w-[98vw] sm:w-[540px] max-w-full overflow-y-scroll custom-scrollbar">
-              <SheetHeader>
-                <SheetTitle>Add Transaction</SheetTitle>
-                <SheetDescription>
-                  Record your income or expense
-                </SheetDescription>
-              </SheetHeader>
-              <TransactionForm onClose={() => setShowTransactionForm(false)} />
+            <SheetContent
+              className="w-full sm:w-[540px] p-0 overflow-y-auto mobile-sheet sm:max-h-[85vh]"
+              side="bottom"
+            >
+              {/* Mobile Header with Back Arrow */}
+              <div className="sticky top-0 z-10 bg-white border-b border-gray-100">
+                <div className="flex items-center h-14 px-4">
+                  <button
+                    onClick={() => setShowTransactionForm(false)}
+                    className="mr-3 p-2 -ml-2 hover:bg-gray-100 rounded-full transition-colors"
+                    aria-label="Go back"
+                  >
+                    <svg className="h-5 w-5 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
+                  </button>
+                  <div>
+                    <h2 className="text-lg font-semibold text-gray-900">Add Transaction</h2>
+                    <p className="text-xs text-gray-500">Record your income or expense</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Form Content */}
+              <div className="px-4 pb-24">
+                <TransactionForm onClose={() => setShowTransactionForm(false)} />
+              </div>
             </SheetContent>
           </Sheet>
         </div>
