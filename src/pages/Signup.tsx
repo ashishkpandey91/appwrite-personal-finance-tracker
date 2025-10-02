@@ -64,8 +64,8 @@ export default function Signup() {
   };
 
   return (
-    <div className="w-full flex min-h-screen items-center justify-center px-4">
-      <Card className="w-full md:w-[450px]">
+    <div className="w-full flex min-h-screen items-center justify-center px-4 py-8">
+      <Card className="w-full max-w-md md:w-[450px]">
         <CardHeader>
           <CardTitle className="text-center text-xl pt-3">Sign Up</CardTitle>
           <CardDescription className="text-center text-sm">

@@ -11,7 +11,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Search,
-  Filter,
   TrendingUp,
   TrendingDown,
   Calendar,
@@ -174,63 +173,68 @@ export const TransactionList = ({ transactions = [], isLoading = false }: Transa
             filteredTransactions.map((transaction, index) => (
               <div
                 key={transaction.id}
-                className="mobile-card flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 animate-fade-in gap-3 mb-3"
+                className="mobile-card flex flex-col p-4 bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 animate-fade-in mb-3"
                 style={{ animationDelay: `${index * 50}ms` }}
               >
-                <div className="flex items-start sm:items-center gap-3 sm:gap-4 flex-1 min-w-0">
-                  <div
-                    className={`p-2.5 rounded-full flex-shrink-0 ${
-                      transaction.type === "income"
-                        ? "bg-gradient-to-br from-green-50 to-green-100 text-green-600"
-                        : "bg-gradient-to-br from-red-50 to-red-100 text-red-600"
-                    }`}
-                  >
-                    {transaction.type === "income" ? (
-                      <TrendingUp className="h-4 w-4" />
-                    ) : (
-                      <TrendingDown className="h-4 w-4" />
-                    )}
+                {/* Top Row: Icon, Category, Amount */}
+                <div className="flex items-start justify-between gap-3 mb-2">
+                  <div className="flex items-center gap-3 flex-1 min-w-0">
+                    <div
+                      className={`p-2.5 rounded-full flex-shrink-0 ${
+                        transaction.type === "income"
+                          ? "bg-gradient-to-br from-green-50 to-green-100 text-green-600"
+                          : "bg-gradient-to-br from-red-50 to-red-100 text-red-600"
+                      }`}
+                    >
+                      {transaction.type === "income" ? (
+                        <TrendingUp className="h-4 w-4" />
+                      ) : (
+                        <TrendingDown className="h-4 w-4" />
+                      )}
+                    </div>
+
+                    <Badge variant="outline" className="text-xs capitalize flex-shrink-0 bg-blue-50 border-blue-200 text-blue-700">
+                      {getCategoryName(transaction.category)}
+                    </Badge>
                   </div>
 
-                  <div className="flex-1 min-w-0">
-                    <div className="flex flex-wrap items-start gap-2 mb-1">
-                      <div className="flex-1 min-w-0">
-                        <p className={`font-medium text-sm text-gray-800 capitalize ${
-                          !expandedDescriptions.has(transaction.id) && isLongDescription(transaction.description)
-                            ? "line-clamp-1"
-                            : ""
-                        }`}>
-                          {transaction.description || "No description"}
-                        </p>
-                        {isLongDescription(transaction.description) && (
-                          <button
-                            onClick={() => toggleDescription(transaction.id)}
-                            className="text-xs text-blue-600 hover:text-blue-800 mt-1 font-medium"
-                          >
-                            {expandedDescriptions.has(transaction.id) ? "Show less" : "Show more"}
-                          </button>
-                        )}
-                      </div>
-                      <Badge variant="outline" className="text-xs capitalize flex-shrink-0 bg-blue-50 border-blue-200 text-blue-700">
-                        {getCategoryName(transaction.category)}
-                      </Badge>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-gray-500">
-                      <Calendar className="h-3 w-3 flex-shrink-0" />
-                      {formatDate(transaction.date)}
-                    </div>
+                  <div
+                    className={`text-lg font-bold flex-shrink-0 ${
+                      transaction.type === "income"
+                        ? "text-green-600"
+                        : "text-red-600"
+                    }`}
+                  >
+                    {transaction.type === "income" ? "+" : "-"}₹
+                    {Number(transaction.amount).toFixed(2)}
                   </div>
                 </div>
 
-                <div
-                  className={`text-lg font-bold flex-shrink-0 self-end sm:self-center ${
-                    transaction.type === "income"
-                      ? "text-green-600"
-                      : "text-red-600"
-                  }`}
-                >
-                  {transaction.type === "income" ? "+" : "-"}₹
-                  {Number(transaction.amount).toFixed(2)}
+                {/* Description Row */}
+                {transaction.description && (
+                  <div className="mb-2 pl-11">
+                    <p className={`text-sm text-gray-700 ${
+                      !expandedDescriptions.has(transaction.id) && isLongDescription(transaction.description)
+                        ? "line-clamp-2"
+                        : ""
+                    }`}>
+                      {transaction.description}
+                    </p>
+                    {isLongDescription(transaction.description) && (
+                      <button
+                        onClick={() => toggleDescription(transaction.id)}
+                        className="text-xs text-blue-600 hover:text-blue-800 mt-1 font-medium"
+                      >
+                        {expandedDescriptions.has(transaction.id) ? "Show less" : "Show more"}
+                      </button>
+                    )}
+                  </div>
+                )}
+
+                {/* Date Row */}
+                <div className="flex items-center gap-2 text-xs text-gray-500 pl-11">
+                  <Calendar className="h-3 w-3 flex-shrink-0" />
+                  {formatDate(transaction.date)}
                 </div>
               </div>
             ))

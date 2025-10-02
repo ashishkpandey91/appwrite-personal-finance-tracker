@@ -78,9 +78,6 @@ export const FinanceTabsContent = ({
       return 0;
     });
   const handleAddNewBudget = async () => {
-    console.log("handleAddNewBudget called");
-    console.log("Form data:", budgetForm);
-
     if (!budgetForm.category || !budgetForm.budget) {
       alert("Please fill in all fields");
       return;
@@ -88,21 +85,12 @@ export const FinanceTabsContent = ({
 
     setIsCreatingBudget(true);
     try {
-      console.log("Dispatching createBudget with:", {
-        category: budgetForm.category,
-        budget: Number(budgetForm.budget),
-        month: budgetForm.month,
-        year: budgetForm.year
-      });
-
-      const result = await dispatch(createBudget({
+      await dispatch(createBudget({
         category: budgetForm.category,
         budget: Number(budgetForm.budget),
         month: budgetForm.month,
         year: budgetForm.year
       }));
-
-      console.log("Create budget result:", result);
 
       // Reset form
       setBudgetForm({
@@ -114,8 +102,7 @@ export const FinanceTabsContent = ({
 
       setShowSetBudgetForm(false);
     } catch (error) {
-      console.error("Error creating budget:", error);
-      alert("Failed to create budget. Check console for details.");
+      alert("Failed to create budget. Please try again.");
     } finally {
       setIsCreatingBudget(false);
     }
@@ -172,15 +159,32 @@ export const FinanceTabsContent = ({
           </Button>
 
           <Sheet open={showSetBudgetForm} onOpenChange={setShowSetBudgetForm}>
-            <SheetContent className="w-[98vw] sm:w-[540px] max-w-full">
-              <SheetHeader>
-                <SheetTitle>Update Budget</SheetTitle>
-                <SheetDescription>
-                  Only you can update budget.
-                </SheetDescription>
-              </SheetHeader>
+            <SheetContent
+              className="w-full sm:w-[540px] p-0 overflow-y-auto mobile-sheet"
+              side="bottom"
+            >
+              {/* Mobile Header with Back Arrow */}
+              <div className="sticky top-0 z-10 bg-white border-b border-gray-100">
+                <div className="flex items-center h-14 px-4">
+                  <button
+                    onClick={() => setShowSetBudgetForm(false)}
+                    className="mr-3 p-2 -ml-2 hover:bg-gray-100 rounded-full transition-colors"
+                    aria-label="Go back"
+                  >
+                    <svg className="h-5 w-5 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
+                  </button>
+                  <div>
+                    <h2 className="text-lg font-semibold text-gray-900">Set Budget</h2>
+                    <p className="text-xs text-gray-500">Select category and set monthly limit</p>
+                  </div>
+                </div>
+              </div>
 
-              <div className="flex flex-col gap-4 mt-4">
+              {/* Form Content */}
+              <div className="px-4 pb-24 pt-6">
+                <div className="flex flex-col gap-4">
                 {/* Category Select (NO add new option) */}
                 <div>
                   <Label htmlFor="category">Category</Label>
@@ -273,14 +277,14 @@ export const FinanceTabsContent = ({
                   <Button
                     variant="outline"
                     onClick={() => setShowSetBudgetForm(false)}
-                    className="flex-1"
+                    className="flex-1 h-11"
                     disabled={isCreatingBudget}
                   >
                     Cancel
                   </Button>
                   <Button
                     type="button"
-                    className="flex-1"
+                    className="flex-1 h-11"
                     onClick={handleAddNewBudget}
                     disabled={isCreatingBudget}
                   >
@@ -295,18 +299,36 @@ export const FinanceTabsContent = ({
                   </Button>
                 </div>
               </div>
+              </div>
             </SheetContent>
           </Sheet>
           <Sheet open={showSetBudgetEditForm} onOpenChange={setShowSetBudgetEditForm}>
-            <SheetContent className="w-[98vw] sm:w-[540px] max-w-full">
-              <SheetHeader>
-                <SheetTitle>Edit Budget</SheetTitle>
-                <SheetDescription>
-                  Select category and set monthly limit.
-                </SheetDescription>
-              </SheetHeader>
+            <SheetContent
+              className="w-full sm:w-[540px] p-0 overflow-y-auto mobile-sheet"
+              side="bottom"
+            >
+              {/* Mobile Header with Back Arrow */}
+              <div className="sticky top-0 z-10 bg-white border-b border-gray-100">
+                <div className="flex items-center h-14 px-4">
+                  <button
+                    onClick={() => setShowSetBudgetEditForm(false)}
+                    className="mr-3 p-2 -ml-2 hover:bg-gray-100 rounded-full transition-colors"
+                    aria-label="Go back"
+                  >
+                    <svg className="h-5 w-5 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
+                  </button>
+                  <div>
+                    <h2 className="text-lg font-semibold text-gray-900">Edit Budget</h2>
+                    <p className="text-xs text-gray-500">Select category and set monthly limit</p>
+                  </div>
+                </div>
+              </div>
 
-              <div className="flex flex-col gap-4 mt-4">
+              {/* Form Content */}
+              <div className="px-4 pb-24 pt-6">
+                <div className="flex flex-col gap-4">
                 {/* Category Select (NO add new option) */}
                 <div>
                   <Label htmlFor="category">Category</Label>
@@ -398,14 +420,14 @@ export const FinanceTabsContent = ({
                 <div className="flex gap-3 pt-4 w-full">
                   <Button
                     variant="outline"
-                    onClick={() => setShowSetBudgetForm(false)}
-                    className="flex-1"
+                    onClick={() => setShowSetBudgetEditForm(false)}
+                    className="flex-1 h-11"
                     disabled={isUpdatingBudget}
                   >
                     Cancel
                   </Button>
                   <Button
-                    className="flex-1"
+                    className="flex-1 h-11"
                     onClick={async () => {
                       await handleUpdateBudget();
                     }}
@@ -421,6 +443,7 @@ export const FinanceTabsContent = ({
                     )}
                   </Button>
                 </div>
+              </div>
               </div>
             </SheetContent>
           </Sheet>

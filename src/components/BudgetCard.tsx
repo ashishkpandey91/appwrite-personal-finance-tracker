@@ -248,60 +248,78 @@ export const BudgetCard = ({
 
       {/* Update Budget Sheet */}
       <Sheet open={isEditing} onOpenChange={setIsEditing}>
-        <SheetContent className="w-[98vw] sm:w-[540px] max-w-full">
-          <SheetHeader>
-            <SheetTitle>Update Budget</SheetTitle>
-            <SheetDescription>
-              Update the budget for {categoryName}.
-            </SheetDescription>
-          </SheetHeader>
-
-          <div className="flex flex-col gap-4 mt-4">
-            <div>
-              <Label htmlFor="budget">Budget</Label>
-              <div className="relative mt-1">
-                <IndianRupee className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                <Input
-                  id="budget"
-                  type="number"
-                  placeholder="Enter budget amount"
-                  className="pl-10"
-                  value={budgetForm.budget}
-                  onChange={(e) =>
-                    setBudgetForm((prev) => ({
-                      ...prev,
-                      budget: e.target.value,
-                    }))
-                  }
-                />
+        <SheetContent
+          className="w-full sm:w-[540px] p-0 overflow-y-auto mobile-sheet"
+          side="bottom"
+        >
+          {/* Mobile Header with Back Arrow */}
+          <div className="sticky top-0 z-10 bg-white border-b border-gray-100">
+            <div className="flex items-center h-14 px-4">
+              <button
+                onClick={() => setIsEditing(false)}
+                className="mr-3 p-2 -ml-2 hover:bg-gray-100 rounded-full transition-colors"
+                aria-label="Go back"
+              >
+                <svg className="h-5 w-5 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+              <div>
+                <h2 className="text-lg font-semibold text-gray-900">Update Budget</h2>
+                <p className="text-xs text-gray-500">Update the budget for {categoryName}</p>
               </div>
             </div>
+          </div>
 
-            <div className="flex gap-3 pt-4 w-full">
-              <Button
-                variant="outline"
-                onClick={() => setIsEditing(false)}
-                className="flex-1"
-                disabled={isUpdating}
-              >
-                Cancel
-              </Button>
-              <Button
-                className="flex-1"
-                onClick={async () => {
-                  await handleUpdateBudget();
-                }}
-                disabled={isUpdating}
-              >
-                {isUpdating ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Saving...
-                  </>
-                ) : (
-                  "Save"
-                )}
-              </Button>
+          {/* Form Content */}
+          <div className="px-4 pb-24 pt-6">
+            <div className="flex flex-col gap-4">
+              <div>
+                <Label htmlFor="budget">Budget</Label>
+                <div className="relative mt-1">
+                  <IndianRupee className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <Input
+                    id="budget"
+                    type="number"
+                    placeholder="Enter budget amount"
+                    className="pl-10 h-11"
+                    value={budgetForm.budget}
+                    onChange={(e) =>
+                      setBudgetForm((prev) => ({
+                        ...prev,
+                        budget: e.target.value,
+                      }))
+                    }
+                  />
+                </div>
+              </div>
+
+              <div className="flex gap-3 pt-4 w-full">
+                <Button
+                  variant="outline"
+                  onClick={() => setIsEditing(false)}
+                  className="flex-1 h-11"
+                  disabled={isUpdating}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  className="flex-1 h-11"
+                  onClick={async () => {
+                    await handleUpdateBudget();
+                  }}
+                  disabled={isUpdating}
+                >
+                  {isUpdating ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Saving...
+                    </>
+                  ) : (
+                    "Save"
+                  )}
+                </Button>
+              </div>
             </div>
           </div>
         </SheetContent>

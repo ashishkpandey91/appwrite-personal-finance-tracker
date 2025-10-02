@@ -54,7 +54,7 @@ VITE_APPWRITE_DATABASE_ID=your_database_id
 npm run dev
 ```
 
-5. Open [http://localhost:5173](http://localhost:5173) in your browser
+5. Open [http://localhost:5173](http://localhost:8080) in your browser
 
 ## Available Scripts
 

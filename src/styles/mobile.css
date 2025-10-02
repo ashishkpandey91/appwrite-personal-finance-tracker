@@ -71,19 +71,37 @@ input, textarea {
 .mobile-sheet {
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
-  padding-top: 6px;
+  height: 90vh;
+  max-height: 90vh;
 }
 
-.mobile-sheet::before {
-  content: '';
-  position: absolute;
-  top: 8px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 36px;
-  height: 4px;
-  background-color: rgba(0, 0, 0, 0.2);
-  border-radius: 2px;
+/* Desktop: Center the sheet */
+@media (min-width: 640px) {
+  .mobile-sheet {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) !important;
+    height: auto;
+    max-height: 85vh;
+    border-radius: 12px;
+    bottom: auto;
+  }
+}
+
+/* Ensure bottom nav is visible above sheets */
+.mobile-bottom-nav {
+  z-index: 100 !important;
+}
+
+/* Sheet overlay should be below bottom nav */
+[data-radix-dialog-overlay] {
+  z-index: 60 !important;
+}
+
+/* Sheet content positioning */
+[role="dialog"][data-radix-dialog-content] {
+  z-index: 70 !important;
 }
 
 /* Mobile button styles */
