@@ -19,7 +19,8 @@ export const COLLECTIONS = {
   USERS: 'users',
   TRANSACTIONS: 'transactions',
   CATEGORIES: 'categories',
-  BUDGETS: 'budgets'
+  BUDGETS: 'budgets',
+  TODOS: 'todos'
 };
 
 // Export utilities

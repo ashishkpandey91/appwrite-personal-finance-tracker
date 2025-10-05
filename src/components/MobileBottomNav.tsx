@@ -4,6 +4,7 @@ import {
   TrendingUp,
   Home,
   Plus,
+  ListTodo,
 } from "lucide-react";
 
 interface MobileBottomNavProps {
@@ -22,6 +23,7 @@ export const MobileBottomNav = ({
   const tabs = [
     { id: "overview", label: "Home", icon: Home },
     { id: "transactions", label: "History", icon: CreditCard },
+    { id: "todos", label: "Todos", icon: ListTodo },
     { id: "analytics", label: "Analytics", icon: TrendingUp },
   ];
 
