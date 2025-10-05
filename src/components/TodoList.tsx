@@ -23,6 +23,7 @@ import {
 } from "./ui/alert-dialog";
 import { Plus, Pencil, Trash2, Check, X, Loader2 } from "lucide-react";
 import { Todo } from "@/types/finance";
+import { TodoListSkeleton } from "./skeletons/TodoSkeleton";
 
 interface TodoListProps {
   isLoading?: boolean;
@@ -39,6 +40,7 @@ export const TodoList = ({ isLoading = false }: TodoListProps) => {
   const [editingTodo, setEditingTodo] = useState<Todo | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [todoToDelete, setTodoToDelete] = useState<string | null>(null);
+  const [clearCompletedDialogOpen, setClearCompletedDialogOpen] = useState(false);
 
   const [newTodo, setNewTodo] = useState({
     title: "",
@@ -123,26 +125,49 @@ export const TodoList = ({ isLoading = false }: TodoListProps) => {
     setDeleteDialogOpen(true);
   };
 
+  const handleClearCompleted = async () => {
+    const completedTodos = todos.filter((todo) => todo.completed);
+
+    try {
+      await Promise.all(
+        completedTodos.map((todo) => dispatch(deleteTodo(todo.id)))
+      );
+      setClearCompletedDialogOpen(false);
+    } catch (error) {
+      alert("Failed to clear completed todos");
+    }
+  };
+
+  const completedCount = todos.filter((todo) => todo.completed).length;
+
   if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
-      </div>
-    );
+    return <TodoListSkeleton />;
   }
 
   return (
     <div className="space-y-4">
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center flex-wrap gap-3">
         <h2 className="text-2xl font-bold">My Todos</h2>
-        <Button
-          onClick={() => setShowAddTodo(true)}
-          className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
-        >
-          <Plus className="h-4 w-4 mr-2" />
-          Add Todo
-        </Button>
+        <div className="flex gap-2">
+          {completedCount > 0 && (
+            <Button
+              onClick={() => setClearCompletedDialogOpen(true)}
+              variant="outline"
+              className="border-red-200 text-red-600 hover:bg-red-50"
+            >
+              <Trash2 className="h-4 w-4 mr-2" />
+              Clear Completed ({completedCount})
+            </Button>
+          )}
+          <Button
+            onClick={() => setShowAddTodo(true)}
+            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            Add Todo
+          </Button>
+        </div>
       </div>
 
       {/* Todo List */}
@@ -459,6 +484,31 @@ export const TodoList = ({ isLoading = false }: TodoListProps) => {
               className="bg-red-600 hover:bg-red-700"
             >
               Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Clear Completed Confirmation Dialog */}
+      <AlertDialog
+        open={clearCompletedDialogOpen}
+        onOpenChange={setClearCompletedDialogOpen}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Clear Completed Todos</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete all {completedCount} completed
+              todo(s)? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleClearCompleted}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              Clear All
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

@@ -20,8 +20,8 @@ export default defineConfig(({ mode }) => ({
         name: 'Personal Finance Tracker',
         short_name: 'FinanceTracker',
         description: 'Track your personal finances with ease',
-        theme_color: '#ffffff',
-        background_color: '#3E59EB',
+        theme_color: '#584CEB',
+        background_color: '#584CEB',
         display: 'standalone',
         start_url: '/',
         icons: [
@@ -29,11 +29,25 @@ export default defineConfig(({ mode }) => ({
             src: '/android-chrome-192x192.png',
             sizes: '192x192',
             type: 'image/png',
+            purpose: 'any'
+          },
+          {
+            src: '/android-chrome-192x192.png',
+            sizes: '192x192',
+            type: 'image/png',
+            purpose: 'maskable'
           },
           {
             src: '/android-chrome-512x512.png',
             sizes: '512x512',
             type: 'image/png',
+            purpose: 'any'
+          },
+          {
+            src: '/android-chrome-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable'
           },
         ],
       },
