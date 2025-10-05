@@ -17,6 +17,7 @@ import { fetchTransactions } from "@/features/transactionSlice";
 import Header from "@/components/Header";
 import { getUserCategories } from "@/features/categorySlice";
 import { getBudgets } from "@/features/budgetSlice";
+import { fetchTodos } from "@/features/todoSlice";
 
 const Index = () => {
   const transactions = useAppSelector((state) => state.transaction);
@@ -35,6 +36,7 @@ const Index = () => {
         await dispatch(getUserCategories());
         await dispatch(fetchTransactions());
         await dispatch(getBudgets());
+        await dispatch(fetchTodos());
       } finally {
         setIsInitialLoading(false);
       }
@@ -61,9 +63,10 @@ const Index = () => {
             onValueChange={setActiveTab}
             className="space-y-6"
           >
-            <TabsList className="hidden md:grid w-full grid-cols-3 bg-white/80 backdrop-blur-sm">
+            <TabsList className="hidden md:grid w-full grid-cols-4 bg-white/80 backdrop-blur-sm">
               <TabsTrigger value="overview">Home</TabsTrigger>
               <TabsTrigger value="transactions">History</TabsTrigger>
+              <TabsTrigger value="todos">Todos</TabsTrigger>
               <TabsTrigger value="analytics">Analytics</TabsTrigger>
             </TabsList>
 

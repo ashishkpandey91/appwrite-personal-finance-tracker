@@ -29,3 +29,14 @@ export type Budget = {
   year: string;
   expense: number;
 };
+
+export type Todo = {
+  id: string;
+  title: string;
+  description?: string;
+  completed: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type NewTodo = Omit<Todo, 'id' | 'createdAt' | 'updatedAt'>;

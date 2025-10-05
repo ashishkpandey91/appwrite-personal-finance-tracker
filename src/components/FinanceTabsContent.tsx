@@ -3,6 +3,7 @@ import { SpendingChart } from "./SpendingChart";
 import { CategoryChart } from "./CategoryChart";
 import { TransactionList } from "./TransactionList";
 import { BudgetCard } from "./BudgetCard";
+import { TodoList } from "./TodoList";
 import { Transaction } from "@/types/finance";
 import { FinanceHeader } from "./FinanceHeader";
 import { OverviewCards } from "./OverviewCards";
@@ -522,6 +523,10 @@ export const FinanceTabsContent = ({
 
       <TabsContent value="transactions">
         <TransactionList transactions={transactions} isLoading={isLoading} />
+      </TabsContent>
+
+      <TabsContent value="todos">
+        <TodoList isLoading={isLoading} />
       </TabsContent>
 
       <TabsContent value="analytics" className="space-y-6">
