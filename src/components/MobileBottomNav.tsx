@@ -24,7 +24,7 @@ export const MobileBottomNav = ({
     { id: "overview", label: "Home", icon: Home },
     { id: "transactions", label: "History", icon: CreditCard },
     { id: "todos", label: "Todos", icon: ListTodo },
-    { id: "analytics", label: "Analytics", icon: TrendingUp },
+    // { id: "analytics", label: "Analytics", icon: TrendingUp },
   ];
 
   return (
